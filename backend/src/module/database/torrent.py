@@ -55,3 +55,14 @@ class TorrentDatabase:
             if torrent.url not in old_urls:
                 new_torrents.append(torrent)
         return new_torrents
+
+    def delete_by_bangumi_id(self, bangumi_id: int) -> int:
+        torrents = self.session.exec(
+            select(Torrent).where(Torrent.bangumi_id == bangumi_id)
+        ).all()
+        count = len(torrents)
+        for torrent in torrents:
+            self.session.delete(torrent)
+        self.session.commit()
+        logger.debug(f"Deleted {count} torrents for bangumi_id {bangumi_id}.")
+        return count

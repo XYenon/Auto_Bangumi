@@ -134,4 +134,15 @@ export const apiBangumi = {
     );
     return data;
   },
+
+  /**
+   * 从头收集指定 bangumiId 的所有剧集
+   * @param bangumiId - 需要收集的 bangumi 的 id
+   */
+  async collectRule(bangumiId: number) {
+    const { data } = await axios.post<ApiSuccess>(
+      `api/v1/bangumi/collect/${bangumiId}`
+    );
+    return data;
+  },
 };

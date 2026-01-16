@@ -75,6 +75,7 @@
   "homepage": {
     "rule": {
       "apply": "Apply",
+      "collect": "Collect All",
       "delete": "Delete",
       "delete_hit": "Delete Local File?",
       "disable": "Disable",

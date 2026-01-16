@@ -4,6 +4,7 @@ import type { BangumiRule } from '#/bangumi';
 const emit = defineEmits<{
   (e: 'apply', rule: BangumiRule): void;
   (e: 'enable', id: number): void;
+  (e: 'collect', id: number): void;
   (
     e: 'deleteFile',
     type: 'disable' | 'delete',
@@ -57,6 +58,10 @@ function emitEnable() {
   emit('enable', rule.value.id);
 }
 
+function emitCollect() {
+  emit('collect', rule.value.id);
+}
+
 const popupTitle = computed(() => {
   if (rule.value.deleted) {
     return t('homepage.rule.enable_rule');
@@ -99,6 +104,9 @@ const boxSize = computed(() => {
       <ab-rule v-model:rule="rule"></ab-rule>
 
       <div fx-cer justify-end gap-x-10>
+        <ab-button size="small" type="primary" @click="emitCollect">
+          {{ $t('homepage.rule.collect') }}
+        </ab-button>
         <ab-button-multi
           size="small"
           type="warn"

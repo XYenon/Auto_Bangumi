@@ -4,7 +4,7 @@ definePage({
 });
 
 const { bangumi, editRule } = storeToRefs(useBangumiStore());
-const { getAll, updateRule, enableRule, openEditPopup, ruleManage } =
+const { getAll, updateRule, enableRule, collectRule, openEditPopup, ruleManage } =
   useBangumiStore();
 
 const { isMobile } = useBreakpointQuery();
@@ -41,6 +41,7 @@ onActivated(() => {
         v-model:show="editRule.show"
         v-model:rule="editRule.item"
         @enable="(id) => enableRule(id)"
+        @collect="(id) => collectRule(id)"
         @delete-file="
           (type, { id, deleteFile }) => ruleManage(type, id, deleteFile)
         "

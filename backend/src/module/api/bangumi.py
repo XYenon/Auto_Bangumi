@@ -1,8 +1,9 @@
 from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 
-from module.manager import TorrentManager
+from module.manager import SeasonCollector, TorrentManager
 from module.models import APIResponse, Bangumi, BangumiUpdate
+from module.rss import RSSEngine
 from module.security.api import UNAUTHORIZED, get_current_user
 
 from .response import u_response
@@ -137,3 +138,23 @@ async def reset_all():
             status_code=200,
             content={"msg_en": "Reset all rules successfully.", "msg_zh": "重置所有规则成功。"},
         )
+
+
+@router.post(
+    path="/collect/{bangumi_id}",
+    response_model=APIResponse,
+    dependencies=[Depends(get_current_user)],
+)
+async def collect_rule(bangumi_id: int):
+    with TorrentManager() as manager:
+        bangumi = manager.bangumi.search_id(bangumi_id)
+        if not bangumi:
+            return JSONResponse(
+                status_code=404,
+                content={"msg_en": "Bangumi not found.", "msg_zh": "番剧未找到。"},
+            )
+        manager.torrent.delete_by_bangumi_id(bangumi_id)
+    with RSSEngine() as engine, SeasonCollector() as collector:
+        bangumi = engine.bangumi.search_id(bangumi_id)
+        resp = collector.collect_season(bangumi)
+        return u_response(resp)

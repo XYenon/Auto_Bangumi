@@ -1,4 +1,5 @@
 import json
+import re
 from typing import TypeAlias
 
 from module.models import Bangumi, RSSItem, Torrent
@@ -52,4 +53,12 @@ class SearchTorrent(RequestContent, RSSAnalyser):
     def search_season(self, data: Bangumi, site: str = "mikan") -> list[Torrent]:
         rss_item = self.special_url(data, site)
         torrents = self.search_torrents(rss_item)
-        return [torrent for torrent in torrents if data.title_raw in torrent.name]
+        _filter = data.filter.replace(",", "|") if data.filter else None
+        result = []
+        for torrent in torrents:
+            if data.title_raw not in torrent.name:
+                continue
+            if _filter and re.search(_filter, torrent.name):
+                continue
+            result.append(torrent)
+        return result
