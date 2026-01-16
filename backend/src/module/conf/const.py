@@ -52,6 +52,7 @@ ENV_TO_ATTR = {
         "AB_INTERVAL_TIME": ("sleep_time", lambda e: int(e)),
         "AB_RENAME_FREQ": ("times", lambda e: int(e)),
         "AB_WEBUI_PORT": ("webui_port", lambda e: int(e)),
+        "AB_AUTH": ("auth_enable", lambda e: e.lower() in ("true", "1", "t")),
     },
     "downloader": {
         "AB_DOWNLOADER_HOST": "host",

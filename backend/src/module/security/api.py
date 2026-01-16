@@ -1,6 +1,7 @@
 from fastapi import Cookie, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 
+from module.conf import settings
 from module.database import Database
 from module.models.user import User, UserUpdate
 
@@ -12,6 +13,8 @@ active_user = []
 
 
 async def get_current_user(token: str = Cookie(None)):
+    if not settings.program.auth_enable:
+        return "anonymous"
     if not token:
         raise UNAUTHORIZED
     payload = verify_token(token)

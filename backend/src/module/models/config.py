@@ -8,6 +8,7 @@ class Program(BaseModel):
     rss_time: int = Field(900, description="Sleep time")
     rename_time: int = Field(60, description="Rename times in one loop")
     webui_port: int = Field(7892, description="WebUI port")
+    auth_enable: bool = Field(True, description="Enable authentication")
 
 
 class Downloader(BaseModel):

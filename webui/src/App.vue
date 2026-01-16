@@ -20,9 +20,9 @@ const theme: GlobalThemeOverrides = {
 
 const { refresh, isLoggedIn } = useAuth();
 
-if (isLoggedIn.value) {
-  refresh();
-}
+// Try to refresh token on startup, if it succeeds, user is authenticated
+// This handles both: normal login flow and auth disabled mode
+refresh();
 </script>
 
 <template>
